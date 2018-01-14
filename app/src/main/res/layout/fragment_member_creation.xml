@@ -9,19 +9,30 @@
         android:text="@string/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/member_creation_email_edittext"
+        android:id="@+id/edit_text_fmc_email"
         android:inputType="textEmailAddress"/>
     <EditText
         android:text="@string/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/member_creation_password_edittext"
+        android:id="@+id/edit_text_fmc_password"
+        android:inputType="textPassword"/>
+    <EditText
+        android:text="@string/password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edit_text_fmc_password_confirm"
         android:inputType="textPassword"/>
     <Button
         android:text="@string/continue_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/member_creation_continue_button"/>
+        android:id="@+id/button_fmc_membercreation"/>
+    <TextView
+        android:id="@+id/text_view_fmc_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="boobs"/>
 
 
 </LinearLayout>
