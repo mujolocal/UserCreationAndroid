@@ -20,7 +20,7 @@ import java.net.URL;
  *     0.API_ADDRESS has to be changed to match appropriate api ADDRESS
  *     1. has to be initialized with the email
  *     2. After Initialization call validateEmail()
- *     3. call emailALreadyExists to
+ *     3. call getemailisvalidboolean to
  *
  */
 

@@ -15,11 +15,16 @@ import android.widget.TextView;
 
 /**
  * Created by mjohnson on 1/11/18.
+ * needs:
+ *      memberCreation (create a new user)
+ *      web access validation(check to see if there is an internet connection)
+ *      tests
+ *
  */
 
 public class MemberCreationFragment extends Fragment {
     private static final  String TAG ="MemberCreationFragment";
-    private  Member mMember;
+//    private  Member mMember;
     private EditText mEmailEditText;
     private EditText mPasswordEditText;
     private EditText mPasswordConfimEditText;
@@ -27,6 +32,7 @@ public class MemberCreationFragment extends Fragment {
     private TextView mInfoTextView;
     private WebPullTask mWebPullTask;
     private ProgressBar mProgressBar;
+    private CreateMemberWebPush mCreateMemberWebPush;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +55,7 @@ public class MemberCreationFragment extends Fragment {
         mContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mInfoTextView.setText("");
                 mProgressBar.setVisibility(View.VISIBLE);
                 Log.d(TAG, "onClick: ");
 
@@ -83,6 +90,11 @@ public class MemberCreationFragment extends Fragment {
             Log.d(TAG, "doInBackground: ");
             mEmailValidationWebPull = new EmailValidationWebPull(mEmailEditText.getText().toString());
             mEmailValidationWebPull.validateEmail();
+            if(mEmailValidationWebPull.getEmailIsValidBoolean()){
+                mCreateMemberWebPush = new CreateMemberWebPush(
+                        mEmailEditText.getText().toString(),
+                        mPasswordConfimEditText.getText().toString());
+            }
             return null;
         }
 
