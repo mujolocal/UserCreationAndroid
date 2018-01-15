@@ -71,7 +71,7 @@ public class MemberCreationFragment extends Fragment {
     }
     private class WebPullTask extends AsyncTask<Void,Void,Void>{
         private static final String Tag = "WebPullTask";
-        private WebPull mWebPull;
+        private EmailValidationWebPull mEmailValidationWebPull;
 
         @Override
         protected void onPreExecute() {
@@ -81,20 +81,18 @@ public class MemberCreationFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
-
             Log.d(TAG, "doInBackground: 2");
-            mWebPull = new WebPull(mEmailEditText.getText().toString(),
+            mEmailValidationWebPull = new EmailValidationWebPull(mEmailEditText.getText().toString(),
                     mPasswordConfimEditText.getText().toString());
-            mWebPull.validateEmail();
+            mEmailValidationWebPull.validateEmail();
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             Log.d(TAG, "onPostExecute: 3");
-
             super.onPostExecute(aVoid);
-            if(mWebPull.emailAlreadyExists()){
+            if(mEmailValidationWebPull.emailAlreadyExists()){
                 mInfoTextView.setText("Email Already Used, please choose another");
             }
             mProgressBar.setVisibility(View.INVISIBLE);
@@ -117,9 +115,5 @@ public class MemberCreationFragment extends Fragment {
         mPasswordConfimEditText.setClickable(bool);
         mContinueButton.setEnabled(bool);
         mContinueButton.setClickable(bool);
-
     }
-
-
-
 }

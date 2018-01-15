@@ -15,20 +15,23 @@ import java.net.URL;
 
 /**
  * Created by mjohnson on 1/13/18.
+ * API_ADDRESS has to be changed before production
+ * THis class checks to see if email is in database
+ *
  */
 
-public class WebPull {
-   private static final String TAG = "WebPull";
+public class EmailValidationWebPull {
+   private static final String TAG = "EmailValidationWebPull";
    private static final  String API_ADDRESS = "http://10.0.2.2:8000/members/users/";
    private String mEmail;
-   private String mPassword;
+//   private String mPassword;
    private JSONArray mJsonArray;
 
 
-   public WebPull(String email, String password){
-       Log.d(TAG, "WebPull: ");
+   public EmailValidationWebPull(String email, String password){
+       Log.d(TAG, "EmailValidationWebPull: ");
        setEmail(email);
-       setPassword(password);
+//       setPassword(password);
    }
     public byte[] getUrlBytes(String urlSpec) throws IOException {
         Log.d(TAG, "getUrlBytes: ");
@@ -104,13 +107,13 @@ public class WebPull {
         mEmail = email;
     }
 
-    public String getPassword() {
-        return mPassword;
-    }
+//    public String getPassword() {
+//        return mPassword;
+//    }
 
-    private void setPassword(String password) {
-        mPassword = password;
-    }
+//    private void setPassword(String password) {
+//        mPassword = password;
+//    }
 
     public JSONArray getJsonString() {
         return mJsonArray;
