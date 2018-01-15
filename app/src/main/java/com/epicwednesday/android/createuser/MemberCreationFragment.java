@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 /**
@@ -22,9 +23,11 @@ public class MemberCreationFragment extends Fragment {
 
     private EditText mEmailEditText;
     private EditText mPasswordEditText;
+    private EditText mPasswordConfimEditText;
     private Button mContinueButton;
     private TextView mInfoTextView;
     private WebPullTask mWebPullTask;
+    private ProgressBar mProgressBar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,14 +41,30 @@ public class MemberCreationFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_member_creation,container,false);
         mEmailEditText = view.findViewById(R.id.edit_text_fmc_email);
         mPasswordEditText = view.findViewById(R.id.edit_text_fmc_password);
+        mPasswordConfimEditText = view.findViewById(R.id.edit_text_fmc_password_confirm);
         mInfoTextView = view.findViewById(R.id.text_view_fmc_info);
-        mWebPullTask = new WebPullTask();
+        mProgressBar = view.findViewById(R.id.progress_bar_fmc);
+//        mWebPullTask = new WebPullTask();
+
         mContinueButton = view.findViewById(R.id.button_fmc_membercreation);
         mContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mProgressBar.setVisibility(View.VISIBLE);
                 Log.d(TAG, "onClick: 1");
-                mWebPullTask.execute();
+                if(!passwordsAreTheSame()){
+                    mProgressBar.setVisibility(View.INVISIBLE);
+                    mInfoTextView.setText("Passwords are not the Same. Please re Enter them ");
+                    mPasswordConfimEditText.setText("");
+                    mPasswordEditText.setText("");
+                }else if(mPasswordConfimEditText.getText().toString().length() < 4){
+                    mProgressBar.setVisibility(View.INVISIBLE);
+                    mInfoTextView.setText("Password too short please make greater than 3 characters");
+                }else{
+                    view.setClickable(false);
+                    view.setEnabled(false);
+                    mWebPullTask.execute();
+                }
             }
         });
 
@@ -58,17 +77,36 @@ public class MemberCreationFragment extends Fragment {
         private WebPull mWebPull;
         @Override
         protected Void doInBackground(Void... voids) {
+
             Log.d(TAG, "doInBackground: 2");
-            mWebPull = new WebPull("m@g.com","112233231231");
-            mWebPull.fetchItems();
+            mWebPull = new WebPull(mEmailEditText.getText().toString(),
+                    mPasswordConfimEditText.getText().toString());
+            mWebPull.validateEmail();
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             Log.d(TAG, "onPostExecute: 3");
+
             super.onPostExecute(aVoid);
-            mInfoTextView.setText(mWebPull.getJsonString());
+            if(mWebPull.emailAlreadyExists()){
+                mInfoTextView.setText("Email Already Used, please choose another");
+            }
+            mProgressBar.setVisibility(View.INVISIBLE);
+
+
+
+
         }
     }
+    private Boolean passwordsAreTheSame(){
+        Boolean bool = Boolean.FALSE;
+        if ( (mPasswordConfimEditText.getText().toString() ).equals(mPasswordEditText.getText().toString() ) ){
+            bool = Boolean.TRUE;
+        }
+        return bool;
+    }
+
+
 }

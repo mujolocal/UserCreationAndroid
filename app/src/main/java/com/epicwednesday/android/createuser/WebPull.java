@@ -3,6 +3,10 @@ package com.epicwednesday.android.createuser;
 import android.net.Uri;
 import android.util.Log;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,10 +19,11 @@ import java.net.URL;
 
 public class WebPull {
    private static final String TAG = "WebPull";
-   private static final  String API_ADDRESS = "http://127.0.0.1:8000/members/users/";
+   private static final  String API_ADDRESS = "http://10.0.2.2:8000/members/users/";
    private String mEmail;
    private String mPassword;
-   private String mJsonString;
+   private JSONArray mJsonArray;
+
 
    public WebPull(String email, String password){
        Log.d(TAG, "WebPull: ");
@@ -50,24 +55,47 @@ public class WebPull {
             connection.disconnect();
         }
     }
+
+
     public String getUrlString(String urlSpec) throws IOException {
         Log.d(TAG, "getUrlString: ");
         return new String(getUrlBytes(urlSpec));
     }
 
-    public void fetchItems() {
+
+    public void validateEmail() {
         try {
             Log.d(TAG, "fetchItems: ");
-            String url = Uri.parse("http://10.0.2.2:8000/members/")
+            String url = Uri.parse(API_ADDRESS)
                     .buildUpon()
                     .build().toString();
             setJsonString( getUrlString(url));
             Log.d(TAG, "fetchItems: "+getJsonString());
-            Log.i(TAG, "Received JSON: " + mJsonString);
+            Log.i(TAG, "Received JSON: " + mJsonArray.toString());
         } catch (IOException ioe) {
             Log.e(TAG, "Failed to fetch items", ioe);
         }
     }
+
+
+    public Boolean emailAlreadyExists(){
+       Boolean bool = Boolean.valueOf(Boolean.FALSE);
+       try {
+            for (int i = 0; i < mJsonArray.length();i++) {
+                JSONObject jsonObject = mJsonArray.getJSONObject(i);
+                Log.d(TAG, "emailAlreadyExists: "+jsonObject.getString("email"));
+              if ((jsonObject.getString("email")).equals(getEmail())){
+                  Log.d(TAG, "emailAlready exists if statement true ");
+                  bool = Boolean.valueOf(Boolean.TRUE);
+              }
+            }
+       }catch (JSONException jse){
+           Log.e(TAG, "emailAlreadyExists: ",jse );
+       }
+           return bool;
+    }
+
+
     public String getEmail() {
         return mEmail;
     }
@@ -84,11 +112,17 @@ public class WebPull {
         mPassword = password;
     }
 
-    public String getJsonString() {
-        return mJsonString;
+    public JSONArray getJsonString() {
+        return mJsonArray;
     }
 
     private void setJsonString(String jsonString) {
-        mJsonString = jsonString;
+        Log.d(TAG, "setJsonString: "+jsonString);
+       try {
+           mJsonArray = new JSONArray(jsonString);
+           Log.d(TAG, "setJsonString: "+ mJsonArray.length());
+       }catch (JSONException jse){
+           Log.e(TAG, "setJsonString: ",jse );
+       }
     }
 }

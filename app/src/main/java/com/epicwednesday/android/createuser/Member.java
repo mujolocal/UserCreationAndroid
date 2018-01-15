@@ -1,7 +1,5 @@
 package com.epicwednesday.android.createuser;
 
-import android.provider.ContactsContract;
-
 import java.util.Date;
 import java.util.UUID;
 
@@ -12,7 +10,7 @@ import java.util.UUID;
 public class Member {
     private UUID mUUID;
     private Date mCreationDate;
-    private ContactsContract.CommonDataKinds.Email mEmail;
+    private String mEmail;
 
     public Member(){
         setUUID(UUID.randomUUID());
@@ -36,11 +34,11 @@ public class Member {
         mCreationDate = creationDate;
     }
 
-    public ContactsContract.CommonDataKinds.Email getEmail() {
+    public String getEmail() {
         return mEmail;
     }
 
-    public void setEmail(ContactsContract.CommonDataKinds.Email email) {
+    public void setEmail(String email) {
         mEmail = email;
     }
 }

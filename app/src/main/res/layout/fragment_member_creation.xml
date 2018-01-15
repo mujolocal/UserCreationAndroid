@@ -6,33 +6,48 @@
     android:orientation="vertical"
     android:id="@+id/fragment_member_creation">
     <EditText
-        android:text="@string/email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edit_text_fmc_email"
-        android:inputType="textEmailAddress"/>
+        android:inputType="textEmailAddress"
+        android:hint="Email"/>
     <EditText
-        android:text="@string/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edit_text_fmc_password"
-        android:inputType="textPassword"/>
+        android:inputType="textPassword"
+        android:hint="password"/>
     <EditText
-        android:text="@string/password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/edit_text_fmc_password_confirm"
-        android:inputType="textPassword"/>
-    <Button
-        android:text="@string/continue_button"
-        android:layout_width="wrap_content"
+        android:inputType="textPassword"
+        android:hint="password confirm"/>
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/button_fmc_membercreation"/>
+        android:orientation="vertical"
+        android:gravity="center">
+        <Button
+            android:text="@string/continue_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_fmc_membercreation"
+            android:hint="continue"/>
+
+        <ProgressBar
+            style="@android:style/Widget.ProgressBar.Large"
+            android:id="@+id/progress_bar_fmc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            />
+    </LinearLayout>
     <TextView
         android:id="@+id/text_view_fmc_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="boobs"/>
+        android:text=""/>
 
 
 </LinearLayout>
