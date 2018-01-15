@@ -20,7 +20,6 @@ import android.widget.TextView;
 public class MemberCreationFragment extends Fragment {
     private static final  String TAG ="MemberCreationFragment";
     private  Member mMember;
-
     private EditText mEmailEditText;
     private EditText mPasswordEditText;
     private EditText mPasswordConfimEditText;
@@ -51,7 +50,7 @@ public class MemberCreationFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 mProgressBar.setVisibility(View.VISIBLE);
-                Log.d(TAG, "onClick: 1");
+                Log.d(TAG, "onClick: ");
 
                 if(!passwordsAreTheSame()){
                     mProgressBar.setVisibility(View.INVISIBLE);
@@ -81,18 +80,17 @@ public class MemberCreationFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            Log.d(TAG, "doInBackground: 2");
-            mEmailValidationWebPull = new EmailValidationWebPull(mEmailEditText.getText().toString(),
-                    mPasswordConfimEditText.getText().toString());
+            Log.d(TAG, "doInBackground: ");
+            mEmailValidationWebPull = new EmailValidationWebPull(mEmailEditText.getText().toString());
             mEmailValidationWebPull.validateEmail();
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            Log.d(TAG, "onPostExecute: 3");
+            Log.d(TAG, "onPostExecute: ");
             super.onPostExecute(aVoid);
-            if(mEmailValidationWebPull.emailAlreadyExists()){
+            if(!mEmailValidationWebPull.getEmailIsValidBoolean()){
                 mInfoTextView.setText("Email Already Used, please choose another");
             }
             mProgressBar.setVisibility(View.INVISIBLE);
