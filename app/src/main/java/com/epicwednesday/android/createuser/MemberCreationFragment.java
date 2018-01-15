@@ -52,6 +52,7 @@ public class MemberCreationFragment extends Fragment {
             public void onClick(View view) {
                 mProgressBar.setVisibility(View.VISIBLE);
                 Log.d(TAG, "onClick: 1");
+
                 if(!passwordsAreTheSame()){
                     mProgressBar.setVisibility(View.INVISIBLE);
                     mInfoTextView.setText("Passwords are not the Same. Please re Enter them ");
@@ -61,20 +62,23 @@ public class MemberCreationFragment extends Fragment {
                     mProgressBar.setVisibility(View.INVISIBLE);
                     mInfoTextView.setText("Password too short please make greater than 3 characters");
                 }else{
-                    view.setClickable(false);
-                    view.setEnabled(false);
+                    mWebPullTask = new WebPullTask();
                     mWebPullTask.execute();
                 }
             }
         });
-
-
-
         return view;
     }
     private class WebPullTask extends AsyncTask<Void,Void,Void>{
         private static final String Tag = "WebPullTask";
         private WebPull mWebPull;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            clickablesEnabled(false);
+        }
+
         @Override
         protected Void doInBackground(Void... voids) {
 
@@ -94,10 +98,7 @@ public class MemberCreationFragment extends Fragment {
                 mInfoTextView.setText("Email Already Used, please choose another");
             }
             mProgressBar.setVisibility(View.INVISIBLE);
-
-
-
-
+            clickablesEnabled(true);
         }
     }
     private Boolean passwordsAreTheSame(){
@@ -107,6 +108,18 @@ public class MemberCreationFragment extends Fragment {
         }
         return bool;
     }
+    private void clickablesEnabled(Boolean bool){
+        mEmailEditText.setClickable(bool);
+        mEmailEditText.setEnabled(bool );
+        mPasswordEditText.setClickable(bool);
+        mPasswordEditText.setEnabled(bool);
+        mPasswordConfimEditText.setEnabled(bool);
+        mPasswordConfimEditText.setClickable(bool);
+        mContinueButton.setEnabled(bool);
+        mContinueButton.setClickable(bool);
+
+    }
+
 
 
 }
