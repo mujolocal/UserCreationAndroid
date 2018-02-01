@@ -30,9 +30,10 @@ public class MemberCreationFragment extends Fragment {
     private EditText mPasswordConfimEditText;
     private Button mContinueButton;
     private TextView mInfoTextView;
-    private WebPullTask mWebPullTask;
     private ProgressBar mProgressBar;
-    private CreateMemberWebPush mCreateMemberWebPush;
+    private CreateMemberWebPull mCreateMemberWebPull;
+    private String results;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,57 +59,27 @@ public class MemberCreationFragment extends Fragment {
                 mInfoTextView.setText("");
                 mProgressBar.setVisibility(View.VISIBLE);
                 Log.d(TAG, "onClick: ");
-
+                clickablesEnabled(false);
                 if(!passwordsAreTheSame()){
+                    clickablesEnabled(true);
                     mProgressBar.setVisibility(View.INVISIBLE);
                     mInfoTextView.setText("Passwords are not the Same. Please re Enter them ");
                     mPasswordConfimEditText.setText("");
                     mPasswordEditText.setText("");
                 }else if(mPasswordConfimEditText.getText().toString().length() < 4){
+                    clickablesEnabled(true);
                     mProgressBar.setVisibility(View.INVISIBLE);
                     mInfoTextView.setText("Password too short please make greater than 3 characters");
                 }else{
-                    mWebPullTask = new WebPullTask();
-                    mWebPullTask.execute();
+                    mCreateMemberWebPull = new CreateMemberWebPull();
+                    CreateMemberWebPullAsyncTask createMemberWebPullAsyncTask = new CreateMemberWebPullAsyncTask();
+                    createMemberWebPullAsyncTask.execute();
                 }
             }
         });
         return view;
     }
-    private class WebPullTask extends AsyncTask<Void,Void,Void>{
-        private static final String Tag = "WebPullTask";
-        private EmailValidationWebPull mEmailValidationWebPull;
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            clickablesEnabled(false);
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Log.d(TAG, "doInBackground: ");
-            mEmailValidationWebPull = new EmailValidationWebPull(mEmailEditText.getText().toString());
-            mEmailValidationWebPull.validateEmail();
-            if(mEmailValidationWebPull.getEmailIsValidBoolean()){
-                mCreateMemberWebPush = new CreateMemberWebPush(
-                        mEmailEditText.getText().toString(),
-                        mPasswordConfimEditText.getText().toString());
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            Log.d(TAG, "onPostExecute: ");
-            super.onPostExecute(aVoid);
-            if(!mEmailValidationWebPull.getEmailIsValidBoolean()){
-                mInfoTextView.setText("Email Already Used, please choose another");
-            }
-            mProgressBar.setVisibility(View.INVISIBLE);
-            clickablesEnabled(true);
-        }
-    }
     private Boolean passwordsAreTheSame(){
         Boolean bool = Boolean.FALSE;
         if ( (mPasswordConfimEditText.getText().toString() ).equals(mPasswordEditText.getText().toString() ) ){
@@ -125,5 +96,25 @@ public class MemberCreationFragment extends Fragment {
         mPasswordConfimEditText.setClickable(bool);
         mContinueButton.setEnabled(bool);
         mContinueButton.setClickable(bool);
+    }
+    private class CreateMemberWebPullAsyncTask extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mCreateMemberWebPull.nameAndPass(mEmailEditText.getText().toString()
+                    ,mPasswordConfimEditText.getText().toString());
+            mCreateMemberWebPull.createUser();
+            Log.d(TAG, "doInBackground: ASYNC TAsk");
+         return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            results = mCreateMemberWebPull.getResults();
+            Log.d(TAG, "onPostExecute: "+results);
+            clickablesEnabled(true);
+            mProgressBar.setVisibility(View.INVISIBLE);
+        }
     }
 }
